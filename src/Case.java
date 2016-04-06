@@ -1,5 +1,7 @@
+import javax.swing.JPanel;
 
-public class Case {
+
+public class Case extends JPanel{
 	// TODO verifier implementation
 	//private coordonnee positionCase;
 	private boolean couleur;
@@ -13,7 +15,7 @@ public class Case {
 		return couleur;
 	}
 	
-	public void setColor(boolean nouvelleCouleur){
+	public void setCouleur(boolean nouvelleCouleur){
 		couleur=nouvelleCouleur;
 	}
 	

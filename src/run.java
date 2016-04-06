@@ -6,8 +6,7 @@ public class run {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		  Grille g = new Grille();
-	      g.setVisible(true);
+		  Fenetre g = new Fenetre();
 	}
 
 }
