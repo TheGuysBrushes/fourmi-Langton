@@ -6,7 +6,8 @@ public class run {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		  Fenetre g = new Fenetre();
+		  Fenetre f = new Fenetre();
+		  f.lancerDeplacementsFourmis();
 	}
 
 }
