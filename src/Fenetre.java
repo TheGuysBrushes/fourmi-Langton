@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -23,32 +22,34 @@ public class Fenetre extends JFrame implements ActionListener {
 	private JButton fast;
 	private JButton remove;
 	private JPanel grille;
-	private JPanel blanc;	//mettre JPanel
-	private JPanel noir;	//mettre JPanel
+	private coordonnee maxGrille;
+	private Case[][] tableauCase;
+	
 	
 	public Fenetre() {
-		//this.setVisible(true);
+		super("Ou est la fourmi ?");
 		this.buildComponent();
 		this.buildInterface();
 		this.buildEvents();
 	}
 	
 	private void buildComponent() {
-		this.configuration = new JPanel();
-		this.configurer = new JButton("Configurer");
-		this.interfaceg = new JPanel ();
-		this.go = new JButton(">");
-		this.pause = new JButton ("||");
-		this.fast = new JButton (">>");
-		this.remove = new JButton ("|<");
-		this.grille = new JPanel();
-		/*this.blanc = new JLabel("O");
-		this.noir = new JLabel("X");*/
+		configuration = new JPanel();
+		configurer = new JButton("Configurer");
+		interfaceg = new JPanel ();
+		go = new JButton(">");
+		pause = new JButton ("||");
+		fast = new JButton (">>");
+		remove = new JButton ("|<");
+		grille = new JPanel();
+		maxGrille = new coordonnee(10,10);
+		tableauCase = new Case[100][100];
+		
 	}
 	
 	private void buildInterface(){
 		
-		
+		//construction de la fenetre JFrame
 		this.setLayout(new BorderLayout());
 		this.setSize(300,360);
 		this.setResizable(false);
@@ -64,23 +65,28 @@ public class Fenetre extends JFrame implements ActionListener {
 		this.interfaceg.add(this.remove);
 		this.interfaceg.setLayout(new GridLayout(1,4));
 		this.add(this.interfaceg, BorderLayout.SOUTH);
+
 		
 		//Construction de la grille
-		GridLayout gl= new GridLayout(10,0/*inutile*/,1,1);
+		GridLayout gl= new GridLayout(maxGrille.getAbs(),0/*inutile*/,1,1);
 		this.grille.setLayout(gl);
 		grille.removeAll();
 		this.add(this.grille, BorderLayout.CENTER);
-		//this.grille.setSize(500,500);
+		//TODO voir taille avec set??? taille colonnes et lignes
 		
-		Case[][] tableauCase = new Case[100][100];
-		Fourmi f = new Fourmi(5,5);
+	}
+		
+		
+	private void buildEvents() {
+		//this.buildInterface();
+	}
+	
+	public void lancerDeplacementsFourmis(){
+		Fourmi f = new Fourmi(2,2);
 		f.setDirection(1);
-		/*f.setAbs(4);
-		f.setOrd(2);*/
-		/*fourmi_gauche = new Fourmi();
-						fourmi_gauche.setDirection(2);
-						fourmi_gauche.setOpaque(true);*/
-		
+
+		JPanel blanc;
+		JPanel noir;
 		
 		for (int i=1; i<=90;i++){
 			for (int j=1; j<=90;j++){
@@ -90,8 +96,8 @@ public class Fenetre extends JFrame implements ActionListener {
 		f.actionArrive(tableauCase);
 		tableauCase[1][3].setCouleur(true);
 		for (int tmp=0;tmp<800;tmp++){
-			for (int j=1; j<=10;j++){
-				for (int i=1; i<=10;i++){
+			for (int j=1; j<=maxGrille.getAbs();j++){
+				for (int i=1; i<=maxGrille.getOrd();i++){
 					if(tableauCase[i][j].getNombreFourmis()>0){
 						
 						grille.add(f);
@@ -119,42 +125,22 @@ public class Fenetre extends JFrame implements ActionListener {
 			}
 			this.setVisible(true);
 			try{
-			 	Thread.sleep(010);
+			 	Thread.sleep(100);
 			}catch(InterruptedException e){
 			    System.out.println("got interrupted!");
 			}
 			grille.removeAll();
 			
-			
-			
-				
-				
-				
 				f.actionDepart(tableauCase);
-				f.deplacement(tableauCase);
+				f.deplacement(tableauCase,maxGrille);
 				f.actionArrive(tableauCase);
-		/**/
-			
+				if(f.estMort())
+					f=new Fourmi(1,1);
 		}		
-			
-		/**/
-		
 	}
-		
-	
-	private void buildEvents() {
-		//this.buildInterface();
-	}
-
 
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public boolean contient(coordonnee positionFourmi) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }
-
