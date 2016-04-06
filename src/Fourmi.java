@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
-
+/**/
 /**
  * La classe Fourmi décrit le comportement de la fourmi classique
  * @author flodavid, rcharlot
@@ -79,21 +79,15 @@ public class Fourmi extends JPanel implements IFourmi{
 			direction+=4;
 	}
 	
-
-	public void setAbs(int x) {
-		// TODO Verifier method
-		positionFourmi.setAbs(x);
-	}
-	
-	public void setOrd(int y) {
-		// TODO Verifier method
-		positionFourmi.setOrd(y);
+	public boolean estMort(){
+		return mort;
 	}
 
-	public void checkEtat(Case[][] c) {
-		// TODO	Voir si definir Grille en type Case[][] pour appliquer methode
-		/*if (!c.contient(this.positionFourmi))
-			this.mort=true;*/
+	public void calculMort(coordonnee maxGrille) {
+		if(positionFourmi.getAbs()<=0 || positionFourmi.getAbs()>=maxGrille.getAbs() || positionFourmi.getOrd()<=0 || positionFourmi.getOrd()>=maxGrille.getOrd()){
+			System.out.println("La fourmi est morte");
+			mort=true;
+		}
 	}
 	
 	public void actionDepart(Case[][] c) {
@@ -109,26 +103,29 @@ public class Fourmi extends JPanel implements IFourmi{
 	}
 
 
-	public void deplacement(Case[][] c) {
+	public void deplacement(Case[][] c, coordonnee maxGrille) {
 		// TODO Verifier checkEtat, grille est un tableau de cases
 		if (this.direction==0)
-			this.setOrd(this.positionFourmi.getOrd()-1);
+			this.positionFourmi.setOrd(this.positionFourmi.getOrd()-1);
 		if (this.direction==1)
-			this.setAbs(this.positionFourmi.getAbs()+1);
+			this.positionFourmi.setAbs(this.positionFourmi.getAbs()+1);
 		if (this.direction==2)
-			this.setOrd(this.positionFourmi.getOrd()+1);
+			this.positionFourmi.setOrd(this.positionFourmi.getOrd()+1);
 		if (this.direction==3)
-			this.setAbs(this.positionFourmi.getAbs()-1);
-		this.checkEtat(c);
+			this.positionFourmi.setAbs(this.positionFourmi.getAbs()-1);
+		this.calculMort(maxGrille);
 	}
 
 
 	public void actionArrive(Case[][] c) {
-		this.couleurCaseActuel=c[positionFourmi.getAbs()][positionFourmi.getOrd()].getCouleur();
-		c[positionFourmi.getAbs()][positionFourmi.getOrd()].plusNombreFourmis(1);
+		//cannibales
+		if(!estMort()){
+			this.couleurCaseActuel=c[positionFourmi.getAbs()][positionFourmi.getOrd()].getCouleur();
+			c[positionFourmi.getAbs()][positionFourmi.getOrd()].plusNombreFourmis(1);
+		}
 	}
 	
-	 protected void paintComponent(Graphics g){
+	 public void paintComponent(Graphics g){
         super.paintComponent(g);
         int[] posAbs; 
         int[] posOrd;
